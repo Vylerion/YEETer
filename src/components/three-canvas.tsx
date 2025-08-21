@@ -3,6 +3,10 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { useRouter } from 'next/navigation';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+
 
 const ThreeCanvas: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -15,17 +19,30 @@ const ThreeCanvas: React.FC = () => {
 
     // Scene
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xF5F5DC); // light beige background from globals.css
+    scene.background = new THREE.Color(0x87CEEB);
 
     // Camera
     const camera = new THREE.PerspectiveCamera(75, currentMount.clientWidth / currentMount.clientHeight, 0.1, 1000);
-    camera.position.set(0, 5, 15);
+    camera.position.set(0, 8, 18);
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(currentMount.clientWidth, currentMount.clientHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.toneMapping = THREE.ReinhardToneMapping;
     currentMount.appendChild(renderer.domElement);
+    
+    // Post-processing for glow effect
+    const renderScene = new RenderPass( scene, camera );
+    const bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );
+    bloomPass.threshold = 0;
+    bloomPass.strength = 1.2;
+    bloomPass.radius = 0.5;
+
+    const composer = new EffectComposer( renderer );
+    composer.addPass( renderScene );
+    composer.addPass( bloomPass );
+
 
     // Lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
@@ -67,60 +84,42 @@ const ThreeCanvas: React.FC = () => {
         sprite.position.copy(position);
         scene.add(sprite);
     }
-
-    // Barn (Insurance)
-    const barn = new THREE.Mesh(new THREE.BoxGeometry(3, 2.5, 3.5), new THREE.MeshStandardMaterial({ color: 0xc62828 }));
-    barn.position.set(-10, 1.25, 0);
-    barn.userData = { url: '/insurance', label: 'Insurance' };
-    scene.add(barn);
-    interactiveObjects.push(barn);
-    addLabel('Insurance', new THREE.Vector3(-10, 3.5, 0));
-
-
-    // Seedling (Market)
-    const seedling = new THREE.Mesh(new THREE.ConeGeometry(0.7, 1.5, 8), new THREE.MeshStandardMaterial({ color: 0x66bb6a }));
-    seedling.position.set(-5, 0.75, 0);
-    seedling.userData = { url: '/market', label: 'Market' };
-    scene.add(seedling);
-    interactiveObjects.push(seedling);
-    addLabel('Market', new THREE.Vector3(-5, 2.5, 0));
-
-    // Building (Mortgage)
-    const building = new THREE.Mesh(new THREE.BoxGeometry(2, 4, 2), new THREE.MeshStandardMaterial({ color: 0x78909c }));
-    building.position.set(0, 2, 0);
-    building.userData = { url: '/mortgage', label: 'Mortgage' };
-    scene.add(building);
-    interactiveObjects.push(building);
-    addLabel('Mortgage', new THREE.Vector3(0, 5, 0));
-
-    // Tractor (Charity)
-    const tractor = new THREE.Mesh(new THREE.BoxGeometry(2.5, 1.5, 1.8), new THREE.MeshStandardMaterial({ color: 0xFFD700 }));
-    tractor.position.set(5, 0.75, 0);
-    tractor.userData = { url: '/charity', label: 'Charity' };
-    scene.add(tractor);
-    interactiveObjects.push(tractor);
-    addLabel('Charity', new THREE.Vector3(5, 2.5, 0));
-
-    // Envelope (Contact)
-    const envelope = new THREE.Mesh(new THREE.PlaneGeometry(2.5, 1.5), new THREE.MeshStandardMaterial({ color: 0xffffff, side: THREE.DoubleSide }));
-    envelope.position.set(10, 0.75, 0);
-    envelope.userData = { url: '/contact', label: 'Contact' };
-    scene.add(envelope);
-    interactiveObjects.push(envelope);
-    addLabel('Contact', new THREE.Vector3(10, 2.5, 0));
-
-    // About Sign
-    const aboutSign = new THREE.Mesh(new THREE.TorusGeometry(1, 0.2, 16, 100), new THREE.MeshStandardMaterial({ color: 0x42a5f5 }));
-    aboutSign.position.set(0, 1.2, -5);
-    aboutSign.userData = { url: '/about', label: 'About' };
-    scene.add(aboutSign);
-    interactiveObjects.push(aboutSign);
-    addLabel('About', new THREE.Vector3(0, 3.2, -5));
     
-    interactiveObjects.forEach(obj => objectBaseY.set(obj.uuid, obj.position.y));
+    const items = [
+        { url: '/insurance', label: 'Insurance', color: 0xc62828, geometry: new THREE.BoxGeometry(3, 2.5, 3.5), y: 1.25, labelY: 3.5 },
+        { url: '/market', label: 'Market', color: 0x66bb6a, geometry: new THREE.ConeGeometry(0.7, 1.5, 8), y: 0.75, labelY: 2.5 },
+        { url: '/mortgage', label: 'Mortgage', color: 0x78909c, geometry: new THREE.BoxGeometry(2, 4, 2), y: 2, labelY: 5 },
+        { url: '/charity', label: 'Charity', color: 0xFFD700, geometry: new THREE.BoxGeometry(2.5, 1.5, 1.8), y: 0.75, labelY: 2.5 },
+        { url: '/contact', label: 'Contact', color: 0xffffff, geometry: new THREE.PlaneGeometry(2.5, 1.5), y: 0.75, labelY: 2.5 },
+        { url: '/about', label: 'About', color: 0x42a5f5, geometry: new THREE.TorusGeometry(1, 0.2, 16, 100), y: 1.2, labelY: 3.2 }
+    ];
+
+    const radius = 10;
+    const angleStep = (Math.PI * 2) / items.length;
+
+    items.forEach((itemData, index) => {
+        const angle = index * angleStep;
+        const x = radius * Math.cos(angle);
+        const z = radius * Math.sin(angle);
+
+        const material = new THREE.MeshStandardMaterial({ 
+            color: itemData.color,
+            side: itemData.label === 'Contact' ? THREE.DoubleSide : THREE.FrontSide
+        });
+
+        const mesh = new THREE.Mesh(itemData.geometry, material);
+        mesh.position.set(x, itemData.y, z);
+        mesh.userData = { url: itemData.url, label: itemData.label, originalColor: new THREE.Color(itemData.color) };
+        scene.add(mesh);
+        interactiveObjects.push(mesh);
+        const labelPosition = new THREE.Vector3(x, itemData.labelY, z);
+        addLabel(itemData.label, labelPosition);
+        
+        objectBaseY.set(mesh.uuid, mesh.position.y);
+    });
 
     const floor = new THREE.Mesh(
-        new THREE.PlaneGeometry(50, 50),
+        new THREE.CircleGeometry(20, 64),
         new THREE.MeshStandardMaterial({ color: 0x9ccc65, roughness: 1 })
     );
     floor.rotation.x = -Math.PI / 2;
@@ -155,15 +154,18 @@ const ThreeCanvas: React.FC = () => {
         raycaster.setFromCamera(mouse, camera);
         const intersects = raycaster.intersectObjects(interactiveObjects);
 
+        // Reset previous intersected object
+        if (intersected && (intersects.length === 0 || intersects[0].object !== intersected)) {
+             (intersected as THREE.Mesh).material.emissive.setHex(0x000000);
+            intersected = null;
+            document.body.style.cursor = 'default';
+        }
+
         if (intersects.length > 0) {
             if (intersected !== intersects[0].object) {
                 intersected = intersects[0].object;
                 document.body.style.cursor = 'pointer';
-            }
-        } else {
-            if (intersected) {
-                intersected = null;
-                document.body.style.cursor = 'default';
+                (intersected as THREE.Mesh).material.emissive.setHex(0x555555);
             }
         }
 
@@ -174,14 +176,17 @@ const ThreeCanvas: React.FC = () => {
             obj.rotation.y = Math.sin(elapsedTime * 0.5 + obj.position.x) * 0.2;
         });
 
-        renderer.render(scene, camera);
+        composer.render();
     };
     animate();
 
     const onResize = () => {
-        camera.aspect = currentMount.clientWidth / currentMount.clientHeight;
+        const width = currentMount.clientWidth;
+        const height = currentMount.clientHeight;
+        camera.aspect = width / height;
         camera.updateProjectionMatrix();
-        renderer.setSize(currentMount.clientWidth, currentMount.clientHeight);
+        renderer.setSize(width, height);
+        composer.setSize(width, height);
     };
     window.addEventListener('resize', onResize);
 
