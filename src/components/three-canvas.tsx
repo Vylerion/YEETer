@@ -91,7 +91,8 @@ const ThreeCanvas: React.FC = () => {
         { url: '/mortgage', label: 'Mortgage', color: 0x78909c, geometry: new THREE.BoxGeometry(2, 4, 2), y: 2, labelY: 5 },
         { url: '/charity', label: 'Charity', color: 0xFFD700, geometry: new THREE.BoxGeometry(2.5, 1.5, 1.8), y: 0.75, labelY: 2.5 },
         { url: '/contact', label: 'Contact', color: 0xffffff, geometry: new THREE.PlaneGeometry(2.5, 1.5), y: 0.75, labelY: 2.5 },
-        { url: '/about', label: 'About', color: 0x42a5f5, geometry: new THREE.TorusGeometry(1, 0.2, 16, 100), y: 1.2, labelY: 3.2 }
+        { url: '/about', label: 'About', color: 0x42a5f5, geometry: new THREE.TorusGeometry(1, 0.2, 16, 100), y: 1.2, labelY: 3.2 },
+        { url: '/', label: 'Logout', color: 0xef5350, geometry: new THREE.CylinderGeometry(1, 1, 0.5, 32), y: 0.25, labelY: 2 }
     ];
 
     const radius = 10;
