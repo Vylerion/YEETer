@@ -245,7 +245,7 @@ const ThreeCanvas: React.FC = () => {
                 document.body.style.cursor = 'pointer';
                  (intersected as THREE.Mesh).traverse((child) => {
                     if (child instanceof THREE.Mesh) {
-                        child.material.emissive.setHex(0x555555);
+                        child.material.emissive.setHex(0x888888);
                     }
                 });
             }
