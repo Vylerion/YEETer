@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 
 const ThreeCanvas: React.FC = () => {
@@ -19,7 +20,7 @@ const ThreeCanvas: React.FC = () => {
 
     // Scene
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x87CEEB);
+    scene.background = new THREE.Color(0x87CEEB); // A nice, bright sky blue
 
     // Camera
     const camera = new THREE.PerspectiveCamera(75, currentMount.clientWidth / currentMount.clientHeight, 0.1, 1000);
@@ -32,11 +33,11 @@ const ThreeCanvas: React.FC = () => {
     renderer.toneMapping = THREE.ReinhardToneMapping;
     currentMount.appendChild(renderer.domElement);
     
-    // Post-processing for glow effect
+    // Post-processing for a subtle glow effect
     const renderScene = new RenderPass( scene, camera );
     const bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );
-    bloomPass.threshold = 0;
-    bloomPass.strength = 1.2;
+    bloomPass.threshold = 0.1; // Higher threshold to make only brighter things glow
+    bloomPass.strength = 0.8;  // Reduced strength for less "fog"
     bloomPass.radius = 0.5;
 
     const composer = new EffectComposer( renderer );
@@ -45,9 +46,9 @@ const ThreeCanvas: React.FC = () => {
 
 
     // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
     scene.add(ambientLight);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
     directionalLight.position.set(5, 10, 7.5);
     directionalLight.castShadow = true;
     scene.add(directionalLight);
@@ -85,38 +86,56 @@ const ThreeCanvas: React.FC = () => {
         scene.add(sprite);
     }
     
+    // To use GLB/GLTF files, update the 'model' property with the path to your file in the /public folder.
+    // Example: model: '/models/my-cool-model.glb'
+    // If 'model' is null, it will fall back to using the 'geometry' and 'color'.
     const items = [
-        { url: '/insurance', label: 'Insurance', color: 0xc62828, geometry: new THREE.BoxGeometry(3, 2.5, 3.5), y: 1.25, labelY: 3.5 },
-        { url: '/market', label: 'Market', color: 0x66bb6a, geometry: new THREE.ConeGeometry(0.7, 1.5, 8), y: 0.75, labelY: 2.5 },
-        { url: '/mortgage', label: 'Mortgage', color: 0x78909c, geometry: new THREE.BoxGeometry(2, 4, 2), y: 2, labelY: 5 },
-        { url: '/charity', label: 'Charity', color: 0xFFD700, geometry: new THREE.BoxGeometry(2.5, 1.5, 1.8), y: 0.75, labelY: 2.5 },
-        { url: '/contact', label: 'Contact', color: 0xffffff, geometry: new THREE.PlaneGeometry(2.5, 1.5), y: 0.75, labelY: 2.5 },
-        { url: '/about', label: 'About', color: 0x42a5f5, geometry: new THREE.TorusGeometry(1, 0.2, 16, 100), y: 1.2, labelY: 3.2 },
-        { url: '/', label: 'Logout', color: 0xef5350, geometry: new THREE.CylinderGeometry(1, 1, 0.5, 32), y: 0.25, labelY: 2 }
+        { url: '/insurance', label: 'Insurance', color: 0xc62828, geometry: new THREE.BoxGeometry(3, 2.5, 3.5), y: 1.25, labelY: 3.5, model: null },
+        { url: '/market', label: 'Market', color: 0x66bb6a, geometry: new THREE.ConeGeometry(0.7, 1.5, 8), y: 0.75, labelY: 2.5, model: null },
+        { url: '/mortgage', label: 'Mortgage', color: 0x78909c, geometry: new THREE.BoxGeometry(2, 4, 2), y: 2, labelY: 5, model: null },
+        { url: '/charity', label: 'Charity', color: 0xFFD700, geometry: new THREE.BoxGeometry(2.5, 1.5, 1.8), y: 0.75, labelY: 2.5, model: null },
+        { url: '/contact', label: 'Contact', color: 0xffffff, geometry: new THREE.PlaneGeometry(2.5, 1.5), y: 0.75, labelY: 2.5, model: null },
+        { url: '/about', label: 'About', color: 0x42a5f5, geometry: new THREE.TorusGeometry(1, 0.2, 16, 100), y: 1.2, labelY: 3.2, model: null },
+        { url: '/', label: 'Logout', color: 0xef5350, geometry: new THREE.CylinderGeometry(1, 1, 0.5, 32), y: 0.25, labelY: 2, model: null }
     ];
 
     const radius = 10;
     const angleStep = (Math.PI * 2) / items.length;
+    const gltfLoader = new GLTFLoader();
 
     items.forEach((itemData, index) => {
         const angle = index * angleStep;
         const x = radius * Math.cos(angle);
         const z = radius * Math.sin(angle);
 
-        const material = new THREE.MeshStandardMaterial({ 
-            color: itemData.color,
-            side: itemData.label === 'Contact' ? THREE.DoubleSide : THREE.FrontSide
-        });
+        const processObject = (object: THREE.Object3D) => {
+            object.position.set(x, itemData.y, z);
+            object.userData = { url: itemData.url, label: itemData.label };
+            if (object instanceof THREE.Mesh) {
+                object.userData.originalColor = (object.material as THREE.MeshStandardMaterial).color.clone();
+            }
+            scene.add(object);
+            interactiveObjects.push(object);
+            const labelPosition = new THREE.Vector3(x, itemData.labelY, z);
+            addLabel(itemData.label, labelPosition);
+            objectBaseY.set(object.uuid, object.position.y);
+        }
 
-        const mesh = new THREE.Mesh(itemData.geometry, material);
-        mesh.position.set(x, itemData.y, z);
-        mesh.userData = { url: itemData.url, label: itemData.label, originalColor: new THREE.Color(itemData.color) };
-        scene.add(mesh);
-        interactiveObjects.push(mesh);
-        const labelPosition = new THREE.Vector3(x, itemData.labelY, z);
-        addLabel(itemData.label, labelPosition);
-        
-        objectBaseY.set(mesh.uuid, mesh.position.y);
+        if (itemData.model) {
+            gltfLoader.load(itemData.model, (gltf) => {
+                const model = gltf.scene;
+                // You may need to scale or adjust your model here
+                // model.scale.set(0.5, 0.5, 0.5); 
+                processObject(model);
+            });
+        } else {
+            const material = new THREE.MeshStandardMaterial({ 
+                color: itemData.color,
+                side: itemData.label === 'Contact' ? THREE.DoubleSide : THREE.FrontSide
+            });
+            const mesh = new THREE.Mesh(itemData.geometry, material);
+            processObject(mesh);
+        }
     });
 
     const floor = new THREE.Mesh(
@@ -153,20 +172,41 @@ const ThreeCanvas: React.FC = () => {
         const elapsedTime = clock.getElapsedTime();
 
         raycaster.setFromCamera(mouse, camera);
-        const intersects = raycaster.intersectObjects(interactiveObjects);
+        const intersects = raycaster.intersectObjects(interactiveObjects, true);
 
         // Reset previous intersected object
-        if (intersected && (intersects.length === 0 || intersects[0].object !== intersected)) {
-             (intersected as THREE.Mesh).material.emissive.setHex(0x000000);
+        if (intersected && (intersects.length === 0 || intersects[0].object.parent?.userData?.url !== intersected.userData.url)) {
+            (intersected as THREE.Mesh).traverse((child) => {
+                if (child instanceof THREE.Mesh) {
+                     child.material.emissive.setHex(0x000000);
+                }
+            });
             intersected = null;
             document.body.style.cursor = 'default';
         }
 
         if (intersects.length > 0) {
-            if (intersected !== intersects[0].object) {
-                intersected = intersects[0].object;
+            let topLevelObject = intersects[0].object;
+            while(topLevelObject.parent && !topLevelObject.userData.url) {
+                topLevelObject = topLevelObject.parent;
+            }
+
+            if (topLevelObject.userData.url && intersected !== topLevelObject) {
+                // Clear previous intersection
+                if (intersected) {
+                     (intersected as THREE.Mesh).traverse((child) => {
+                        if (child instanceof THREE.Mesh) {
+                             child.material.emissive.setHex(0x000000);
+                        }
+                    });
+                }
+                intersected = topLevelObject;
                 document.body.style.cursor = 'pointer';
-                (intersected as THREE.Mesh).material.emissive.setHex(0x555555);
+                 (intersected as THREE.Mesh).traverse((child) => {
+                    if (child instanceof THREE.Mesh) {
+                        child.material.emissive.setHex(0x555555);
+                    }
+                });
             }
         }
 
@@ -206,3 +246,5 @@ const ThreeCanvas: React.FC = () => {
 };
 
 export default ThreeCanvas;
+
+    
