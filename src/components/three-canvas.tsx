@@ -7,6 +7,7 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 
 
 const ThreeCanvas: React.FC = () => {
@@ -20,8 +21,7 @@ const ThreeCanvas: React.FC = () => {
 
     // Scene
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x87CEEB); // A nice, bright sky blue
-
+    
     // Camera
     const camera = new THREE.PerspectiveCamera(75, currentMount.clientWidth / currentMount.clientHeight, 0.1, 1000);
     camera.position.set(0, 8, 18);
@@ -30,14 +30,29 @@ const ThreeCanvas: React.FC = () => {
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(currentMount.clientWidth, currentMount.clientHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.toneMapping = THREE.ReinhardToneMapping;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
     currentMount.appendChild(renderer.domElement);
     
+    // HDRI Loader
+    const rgbeLoader = new RGBELoader();
+    // To use your own HDRI, add it to the /public/hdri/ folder and update the path below.
+    // You can find free HDRIs on sites like Poly Haven.
+    rgbeLoader.load('/hdri/sky.hdr', (texture) => {
+        texture.mapping = THREE.EquirectangularReflectionMapping;
+        scene.background = texture;
+        scene.environment = texture;
+    }, undefined, () => {
+        // Fallback if HDRI fails to load
+        console.warn("Could not load HDRI, falling back to a solid color.");
+        scene.background = new THREE.Color(0x87CEEB);
+    });
+
     // Post-processing for a subtle glow effect
     const renderScene = new RenderPass( scene, camera );
     const bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );
-    bloomPass.threshold = 0.9; // Higher threshold to make only brighter things glow
-    bloomPass.strength = 0.5;  // Reduced strength for less "fog"
+    bloomPass.threshold = 0.9;
+    bloomPass.strength = 0.5;
     bloomPass.radius = 0.5;
 
     const composer = new EffectComposer( renderer );
@@ -46,9 +61,9 @@ const ThreeCanvas: React.FC = () => {
 
 
     // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // Reduced intensity as HDRI provides light
     scene.add(ambientLight);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0); // Kept for shadows
     directionalLight.position.set(5, 10, 7.5);
     directionalLight.castShadow = true;
     scene.add(directionalLight);
@@ -140,7 +155,7 @@ const ThreeCanvas: React.FC = () => {
 
     const floor = new THREE.Mesh(
         new THREE.CircleGeometry(20, 64),
-        new THREE.MeshStandardMaterial({ color: 0x9ccc65, roughness: 1 })
+        new THREE.MeshStandardMaterial({ color: 0x9ccc65, roughness: 0.5, metalness: 0.1 })
     );
     floor.rotation.x = -Math.PI / 2;
     floor.position.y = 0;
@@ -246,3 +261,5 @@ const ThreeCanvas: React.FC = () => {
 };
 
 export default ThreeCanvas;
+
+    
