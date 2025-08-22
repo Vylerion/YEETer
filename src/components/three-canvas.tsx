@@ -8,6 +8,7 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 
 const ThreeCanvas: React.FC = () => {
@@ -33,6 +34,15 @@ const ThreeCanvas: React.FC = () => {
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     currentMount.appendChild(renderer.domElement);
+
+    // Controls
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.screenSpacePanning = false;
+    controls.minDistance = 5;
+    controls.maxDistance = 30;
+    controls.maxPolarAngle = Math.PI / 2 - 0.05; // Prevents camera from going below the ground
     
     // HDRI Loader
     const rgbeLoader = new RGBELoader();
@@ -165,25 +175,41 @@ const ThreeCanvas: React.FC = () => {
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2(-10, -10); // Initialize off-screen
     let intersected: THREE.Object3D | null = null;
+    let isDragging = false;
+    let startMouseX = 0;
+    let startMouseY = 0;
+
+
+    const onMouseDown = (event: MouseEvent) => {
+      isDragging = false;
+      startMouseX = event.clientX;
+      startMouseY = event.clientY;
+    }
 
     const onMouseMove = (event: MouseEvent) => {
+        if (Math.abs(event.clientX - startMouseX) > 5 || Math.abs(event.clientY - startMouseY) > 5) {
+            isDragging = true;
+        }
+
         const rect = renderer.domElement.getBoundingClientRect();
         mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
         mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
     };
 
     const onClick = () => {
-        if (intersected && intersected.userData.url) {
+        if (!isDragging && intersected && intersected.userData.url) {
             router.push(intersected.userData.url);
         }
     };
 
+    window.addEventListener('mousedown', onMouseDown);
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('click', onClick);
 
     const clock = new THREE.Clock();
     const animate = () => {
         requestAnimationFrame(animate);
+        controls.update();
         const elapsedTime = clock.getElapsedTime();
 
         raycaster.setFromCamera(mouse, camera);
@@ -200,7 +226,7 @@ const ThreeCanvas: React.FC = () => {
             document.body.style.cursor = 'default';
         }
 
-        if (intersects.length > 0) {
+        if (intersects.length > 0 && !isDragging) {
             let topLevelObject = intersects[0].object;
             while(topLevelObject.parent && !topLevelObject.userData.url) {
                 topLevelObject = topLevelObject.parent;
@@ -222,6 +248,16 @@ const ThreeCanvas: React.FC = () => {
                         child.material.emissive.setHex(0x555555);
                     }
                 });
+            }
+        } else if (isDragging) {
+             if (intersected) {
+                (intersected as THREE.Mesh).traverse((child) => {
+                    if (child instanceof THREE.Mesh) {
+                         child.material.emissive.setHex(0x000000);
+                    }
+                });
+                intersected = null;
+                document.body.style.cursor = 'default';
             }
         }
 
@@ -248,8 +284,10 @@ const ThreeCanvas: React.FC = () => {
 
     return () => {
         window.removeEventListener('resize', onResize);
+        window.removeEventListener('mousedown', onMouseDown);
         window.removeEventListener('mousemove', onMouseMove);
         window.removeEventListener('click', onClick);
+        controls.dispose();
         if(currentMount && renderer.domElement) {
             currentMount.removeChild(renderer.domElement);
         }
@@ -261,5 +299,3 @@ const ThreeCanvas: React.FC = () => {
 };
 
 export default ThreeCanvas;
-
-    
