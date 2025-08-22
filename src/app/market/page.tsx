@@ -39,7 +39,7 @@ export default function MarketPage() {
                 </CardHeader>
                 <CardContent className="flex-grow p-4">
                   <CardTitle className="text-xl font-headline">{product.name}</CardTitle>
-                  <p className="text-2xl font-bold text-primary">${product.price}</p>
+                  <p className="text-2xl font-bold text-primary">₦{product.price}</p>
                 </CardContent>
                 <CardFooter className="p-4">
                   <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
