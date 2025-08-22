@@ -50,7 +50,7 @@ const ThreeCanvas: React.FC = () => {
     const rgbeLoader = new RGBELoader();
     // To use your own HDRI, add it to the /public/hdri/ folder and update the path below.
     // You can find free HDRIs on sites like Poly Haven.
-    rgbe-loader.load('/hdri/sky.hdr', (texture) => {
+    rgbeLoader.load('/hdri/sky.hdr', (texture) => {
         texture.mapping = THREE.EquirectangularReflectionMapping;
         scene.background = texture;
         scene.environment = texture;
@@ -316,3 +316,5 @@ const ThreeCanvas: React.FC = () => {
 };
 
 export default ThreeCanvas;
+
+    
