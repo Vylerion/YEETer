@@ -36,8 +36,8 @@ const ThreeCanvas: React.FC = () => {
     // Post-processing for a subtle glow effect
     const renderScene = new RenderPass( scene, camera );
     const bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );
-    bloomPass.threshold = 0.1; // Higher threshold to make only brighter things glow
-    bloomPass.strength = 0.8;  // Reduced strength for less "fog"
+    bloomPass.threshold = 0.9; // Higher threshold to make only brighter things glow
+    bloomPass.strength = 0.5;  // Reduced strength for less "fog"
     bloomPass.radius = 0.5;
 
     const composer = new EffectComposer( renderer );
@@ -246,5 +246,3 @@ const ThreeCanvas: React.FC = () => {
 };
 
 export default ThreeCanvas;
-
-    
