@@ -5,9 +5,9 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Sprout } from "lucide-react";
 
 const seeds = [
-  { name: "Sunflower Seeds", price: "15.99", image: "https://placehold.co/300x200.png", hint: "sunflower seeds" },
-  { name: "Corn Kernels", price: "12.50", image: "https://placehold.co/300x200.png", hint: "corn kernels" },
-  { name: "Wheat Grains", price: "18.00", image: "https://placehold.co/300x200.png", hint: "wheat grains" },
+  { name: "Sunflower Seeds", price: "15.99", image_url: "https://placehold.co/300x200.png", hint: "sunflower seeds" },
+  { name: "Corn Kernels", price: "12.50", image_url: "https://placehold.co/300x200.png", hint: "corn kernels" },
+  { name: "Wheat Grains", price: "18.00", image_url: "https://placehold.co/300x200.png", hint: "wheat grains" },
 ];
 
 export default function MarketPage() {
@@ -21,7 +21,7 @@ export default function MarketPage() {
           <Card key={seed.name} className="flex flex-col">
             <CardHeader className="p-0">
               <Image
-                src={seed.image}
+                src={seed.image_url}
                 alt={seed.name}
                 width={300}
                 height={200}
