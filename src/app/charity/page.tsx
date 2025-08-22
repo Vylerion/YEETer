@@ -6,7 +6,7 @@ export default function CharityPage() {
     <PageLayout title="Charity & Community">
       <div className="space-y-4">
         <p>
-          We believe in giving back to the community that feeds us. A portion of every transaction made through AgriMenu 3D goes towards supporting local farming initiatives and agricultural education programs for the next generation.
+          We believe in giving back to the community that feeds us. A portion of every transaction made through FarmNest goes towards supporting local farming initiatives and agricultural education programs for the next generation.
         </p>
         <Image 
           src="https://placehold.co/800x400.png"

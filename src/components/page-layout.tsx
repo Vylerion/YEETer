@@ -23,7 +23,7 @@ export default function PageLayout({ title, children }: PageLayoutProps) {
               <CardTitle className="text-3xl font-headline text-primary">{title}</CardTitle>
               <Button variant="outline" onClick={() => router.push('/home')}>
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to 3D Menu
+                Back
               </Button>
             </div>
           </CardHeader>

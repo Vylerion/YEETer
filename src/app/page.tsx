@@ -10,7 +10,7 @@ export default function LoginPage() {
           <CardHeader className="text-center space-y-2">
             <div className="inline-flex items-center justify-center gap-2">
               <Leaf className="h-10 w-10 text-primary" />
-              <CardTitle className="text-4xl font-headline text-primary">AgriMenu 3D</CardTitle>
+              <CardTitle className="text-4xl font-headline text-primary">FarmNest</CardTitle>
             </div>
             <CardDescription>Enter the digital farmstead</CardDescription>
           </CardHeader>

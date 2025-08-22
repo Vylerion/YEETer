@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'AgriMenu 3D',
+  title: 'FarmNest',
   description: 'An interactive 3D menu for farm services.',
 };
 

@@ -6,7 +6,7 @@ export default function AboutPage() {
     <PageLayout title="About Us">
       <div className="space-y-4">
         <p>
-          Welcome to AgriMenu 3D, your digital gateway to modern farming solutions. We were founded on the principle that technology can revolutionize agriculture, making it more efficient, sustainable, and profitable for farmers everywhere.
+          Welcome to FarmNest, your digital gateway to modern farming solutions. We were founded on the principle that technology can revolutionize agriculture, making it more efficient, sustainable, and profitable for farmers everywhere.
         </p>
         <Image 
           src="https://placehold.co/800x400.png"
