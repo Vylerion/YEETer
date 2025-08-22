@@ -1,3 +1,4 @@
+
 "use client";
 
 import PageLayout from "@/components/page-layout";
@@ -9,6 +10,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useToast } from "@/hooks/use-toast";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -24,6 +27,8 @@ const formSchema = z.object({
 
 export default function ContactPage() {
   const { toast } = useToast();
+  const searchParams = useSearchParams();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,6 +38,14 @@ export default function ContactPage() {
     },
   });
 
+  useEffect(() => {
+    const subject = searchParams.get('subject');
+    if (subject) {
+      form.setValue("message", `${subject}\n\n`);
+    }
+  }, [searchParams, form]);
+
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("Form submitted:", values);
     toast({
@@ -40,6 +53,10 @@ export default function ContactPage() {
       description: "We got your message and will get back to you soon.",
     });
     form.reset();
+     const subject = searchParams.get('subject');
+    if (subject) {
+      form.setValue("message", `${subject}\n\n`);
+    }
   }
 
   return (
@@ -96,3 +113,5 @@ export default function ContactPage() {
     </PageLayout>
   );
 }
+
+    
