@@ -62,7 +62,7 @@ export default function ContactPage() {
   return (
     <PageLayout title="Contact Us">
       <p className="mb-6">
-        Have a question or need support? Reach out to our team. We're here to help you grow.
+        We're always happy to hear from you. Whether you have a question about our services, need assistance with your account, or want to explore partnership opportunities, our team is ready to help. Please fill out the form below, and we'll get back to you as soon as possible. Your growth is our mission, and we're here to support you every step of the way.
       </p>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -113,5 +113,3 @@ export default function ContactPage() {
     </PageLayout>
   );
 }
-
-    
