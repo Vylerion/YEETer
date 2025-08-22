@@ -42,7 +42,7 @@ export default function MarketPage() {
                   <p className="text-2xl font-bold text-primary">₦{product.price}</p>
                 </CardContent>
                 <CardFooter className="p-4">
-                  <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                  <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
                     <Sprout className="mr-2 h-4 w-4" />
                     Buy Now
                   </Button>

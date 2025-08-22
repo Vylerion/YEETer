@@ -25,7 +25,9 @@ const ThreeCanvas: React.FC = () => {
     
     // Camera
     const camera = new THREE.PerspectiveCamera(75, currentMount.clientWidth / currentMount.clientHeight, 0.1, 1000);
-    camera.position.set(0, 8, 18);
+    const startPosition = new THREE.Vector3(0, 25, 25);
+    const endPosition = new THREE.Vector3(0, 8, 18);
+    camera.position.copy(startPosition);
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -48,7 +50,7 @@ const ThreeCanvas: React.FC = () => {
     const rgbeLoader = new RGBELoader();
     // To use your own HDRI, add it to the /public/hdri/ folder and update the path below.
     // You can find free HDRIs on sites like Poly Haven.
-    rgbeLoader.load('/hdri/sky.hdr', (texture) => {
+    rgbe-loader.load('/hdri/sky.hdr', (texture) => {
         texture.mapping = THREE.EquirectangularReflectionMapping;
         scene.background = texture;
         scene.environment = texture;
@@ -207,8 +209,23 @@ const ThreeCanvas: React.FC = () => {
     window.addEventListener('click', onClick);
 
     const clock = new THREE.Clock();
+    let animationProgress = 0;
+    const animationDuration = 2; // in seconds
+
     const animate = () => {
         requestAnimationFrame(animate);
+        const delta = clock.getDelta();
+        
+        if (animationProgress < 1) {
+            animationProgress += delta / animationDuration;
+            animationProgress = Math.min(animationProgress, 1); // Clamp at 1
+            const easeProgress = 1 - Math.pow(1 - animationProgress, 3); // easeOutCubic
+            camera.position.lerpVectors(startPosition, endPosition, easeProgress);
+            controls.enabled = false; // Disable controls during animation
+        } else {
+            controls.enabled = true;
+        }
+
         controls.update();
         const elapsedTime = clock.getElapsedTime();
 
