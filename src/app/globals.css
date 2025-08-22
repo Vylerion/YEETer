@@ -4,6 +4,8 @@
 
 @layer base {
   :root {
+    --background-start-rgb: 245, 245, 220; /* F5F5DC */
+    --background-end-rgb: 230, 230, 210;
     --background: 60 56% 94%; /* #F5F5DC */
     --foreground: 224 71.4% 4.1%;
     --card: 60 56% 94%;
@@ -34,6 +36,8 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
   .dark {
+    --background-start-rgb: 22, 28, 41; /* Darker version of 222.2 47.4% 11.2% */
+    --background-end-rgb: 32, 40, 56;
     --background: 222.2 47.4% 11.2%;
     --foreground: 210 40% 96%;
     --card: 222.2 47.4% 11.2%;
@@ -68,8 +72,14 @@
   * {
     @apply border-border;
   }
-  body, * {
-    @apply bg-background text-foreground;
+  body {
+    color: hsl(var(--foreground));
+    background: linear-gradient(
+        to bottom,
+        transparent,
+        rgb(var(--background-end-rgb))
+      )
+      rgb(var(--background-start-rgb));
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 300ms;
