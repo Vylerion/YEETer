@@ -73,13 +73,12 @@
     @apply border-border;
   }
   body {
-    color: hsl(var(--foreground));
+    @apply bg-background text-foreground;
     background: linear-gradient(
         to bottom,
-        transparent,
+        rgb(var(--background-start-rgb)),
         rgb(var(--background-end-rgb))
-      )
-      rgb(var(--background-start-rgb));
+      );
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 300ms;
