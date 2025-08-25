@@ -61,7 +61,7 @@ export default function CharityPage() {
           </p>
         </div>
         
-        <div className="text-center bg-primary/10 p-6 rounded-lg text-primary-foreground">
+        <div className="text-center bg-primary/10 p-6 rounded-lg">
           <h2 className="text-2xl font-headline font-bold mb-4 flex items-center justify-center text-primary"><Heart className="mr-3"/> Join Us in Making a Difference</h2>
           <p className="mb-4 text-primary/90">
             Interested in partnering with us or learning more about our charitable work? We'd love to hear from you.
