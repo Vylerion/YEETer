@@ -1,4 +1,3 @@
-
 import PageLayout from "@/components/page-layout";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -62,9 +61,9 @@ export default function CharityPage() {
           </p>
         </div>
         
-        <div className="text-center bg-accent/20 p-6 rounded-lg">
-          <h2 className="text-2xl font-headline font-bold mb-4 flex items-center justify-center"><Heart className="text-primary mr-3"/> Join Us in Making a Difference</h2>
-          <p className="mb-4">
+        <div className="text-center bg-primary/10 p-6 rounded-lg text-primary-foreground">
+          <h2 className="text-2xl font-headline font-bold mb-4 flex items-center justify-center text-primary"><Heart className="mr-3"/> Join Us in Making a Difference</h2>
+          <p className="mb-4 text-primary/90">
             Interested in partnering with us or learning more about our charitable work? We'd love to hear from you.
           </p>
           <Link href="/contact?subject=Charity+Partnership+Inquiry" passHref>
