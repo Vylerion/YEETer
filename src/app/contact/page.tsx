@@ -60,9 +60,11 @@ export default function ContactPage() {
 
   return (
     <PageLayout title="Contact Us">
+      <div className="text-center md:text-left">
       <p className="mb-6">
         We're always happy to hear from you. Whether you have a question about our services, need assistance with your account, or want to explore partnership opportunities, our team is ready to help. Please fill out the form below, and we'll get back to you as soon as possible. Your growth is our mission, and we're here to support you every step of the way.
       </p>
+      </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -106,7 +108,9 @@ export default function ContactPage() {
               </FormItem>
             )}
           />
+          <div className="text-center md:text-left">
           <Button type="submit" className="w-full md:w-auto bg-primary hover:bg-primary/90 text-primary-foreground">Send Message</Button>
+          </div>
         </form>
       </Form>
     </PageLayout>

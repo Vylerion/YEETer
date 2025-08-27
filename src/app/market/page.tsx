@@ -6,20 +6,20 @@ import { Sprout, Store, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 
 const products = [
-  { name: "Sunflower Seeds", price: "15.99", image_url: "https://placehold.co/300x200.png", hint: "sunflower seeds" },
-  { name: "Corn Kernels", price: "12.50", image_url: "https://placehold.co/300x200.png", hint: "corn kernels" },
-  { name: "Wheat Grains", price: "18.00", image_url: "https://placehold.co/300x200.png", hint: "wheat grains" },
-  { name: "Organic Fertilizer", price: "25.00", image_url: "https://placehold.co/300x200.png", hint: "fertilizer bag" },
-  { name: "Hand Trowel Set", price: "22.50", image_url: "https://placehold.co/300x200.png", hint: "gardening tools" },
-  { name: "Raw Honey", price: "10.00", image_url: "https://placehold.co/300x200.png", hint: "honey jar" },
+  { name: "Sunflower Seeds", price: "15.99", image_url: "https://picsum.photos/300/200", hint: "sunflower seeds" },
+  { name: "Corn Kernels", price: "12.50", image_url: "https://picsum.photos/300/200", hint: "corn kernels" },
+  { name: "Wheat Grains", price: "18.00", image_url: "https://picsum.photos/300/200", hint: "wheat grains" },
+  { name: "Organic Fertilizer", price: "25.00", image_url: "https://picsum.photos/300/200", hint: "fertilizer bag" },
+  { name: "Hand Trowel Set", price: "22.50", image_url: "https://picsum.photos/300/200", hint: "gardening tools" },
+  { name: "Raw Honey", price: "10.00", image_url: "https://picsum.photos/300/200", hint: "honey jar" },
 ];
 
 export default function MarketPage() {
   return (
-    <PageLayout title="FarmNest Marketplace">
+    <PageLayout title="AgriMenu Marketplace">
       <div className="space-y-12">
-        <div>
-          <h2 className="text-3xl font-bold text-primary mb-2">Buy Goods</h2>
+        <div className="text-center md:text-left">
+          <h2 className="text-3xl font-bold font-headline text-primary mb-2">Buy Goods</h2>
           <p className="mb-6">
             Browse our selection of premium, high-yield seeds and quality farm products. All items are sourced from trusted suppliers and fellow farmers.
           </p>
@@ -36,9 +36,9 @@ export default function MarketPage() {
                     data-ai-hint={product.hint}
                   />
                 </CardHeader>
-                <CardContent className="flex-grow p-4">
+                <CardContent className="flex-grow p-4 text-left">
                   <CardTitle className="text-xl font-headline">{product.name}</CardTitle>
-                  <p className="text-2xl font-bold text-primary">₦{product.price}</p>
+                  <p className="text-2xl font-bold text-primary">${product.price}</p>
                 </CardContent>
                 <CardFooter className="p-4">
                   <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
@@ -51,10 +51,10 @@ export default function MarketPage() {
           </div>
         </div>
 
-        <div className="bg-background/50 p-8 rounded-lg border-2 border-dashed">
-            <h2 className="text-3xl font-bold text-primary mb-4 flex items-center"><Store className="mr-3"/> Sell Your Products</h2>
+        <div className="bg-background/50 p-8 rounded-lg border-2 border-dashed text-center md:text-left">
+            <h2 className="text-3xl font-bold font-headline text-primary mb-4 flex items-center justify-center md:justify-start"><Store className="mr-3"/> Sell Your Products</h2>
             <p className="mb-4">
-              Have products to sell? Join the FarmNest Marketplace to reach a community of passionate farmers and consumers. We provide the platform, you provide the quality goods.
+              Have products to sell? Join the AgriMenu Marketplace to reach a community of passionate farmers and consumers. We provide the platform, you provide the quality goods.
             </p>
             <div className="flex items-start p-4 rounded-md bg-accent/10">
                 <ShieldCheck className="h-8 w-8 text-accent mr-4 mt-1 flex-shrink-0" />

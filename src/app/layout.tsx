@@ -4,7 +4,7 @@ import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
-  title: 'FarmNest',
+  title: 'AgriMenu',
   description: 'An interactive 3D menu for farm services.',
 };
 
@@ -15,8 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head />
-      <body className="antialiased">
+      <head>
+      </head>
+      <body className="antialiased font-body">
         <ThemeProvider
             attribute="class"
             defaultTheme="system"

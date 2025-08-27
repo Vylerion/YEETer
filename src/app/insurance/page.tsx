@@ -33,17 +33,19 @@ export default function InsurancePage() {
             </p>
         </div>
         
+        <div className="flex justify-center">
         <Image 
-          src="https://placehold.co/800x300.png"
+          src="https://picsum.photos/800/300"
           alt="Tractor in a field under a clear sky"
           width={800}
           height={300}
           className="rounded-lg object-cover w-full"
           data-ai-hint="tractor field"
         />
+        </div>
 
         <div>
-          <h2 className="text-2xl font-headline font-bold text-primary mb-4">What We Cover</h2>
+          <h2 className="text-2xl font-headline font-bold text-primary mb-4 text-center md:text-left">What We Cover</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {coverageTypes.map((coverage) => (
               <div key={coverage.name} className="bg-background/50 p-4 rounded-lg border">
@@ -54,8 +56,8 @@ export default function InsurancePage() {
           </div>
         </div>
 
-        <div>
-          <h2 className="text-2xl font-headline font-bold text-primary mb-4">Why Insure with FarmNest?</h2>
+        <div className="text-center md:text-left">
+          <h2 className="text-2xl font-headline font-bold text-primary mb-4">Why Insure with AgriMenu?</h2>
           <ul className="space-y-3">
             <li className="flex items-start">
               <CheckCircle className="h-6 w-6 text-accent mr-3 mt-1 flex-shrink-0" />
@@ -77,7 +79,7 @@ export default function InsurancePage() {
           <p className="mb-4">
             Get a no-obligation quote from one of our specialists today and learn how affordable it can be to protect your farm's future.
           </p>
-          <Link href="/contact" passHref>
+          <Link href="/contact?subject=Insurance+Quote+Inquiry" passHref>
              <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
               Request a Quote
             </Button>

@@ -20,19 +20,19 @@
     --card-foreground: 224 71.4% 4.1%;
     --popover: 60 56% 94%;
     --popover-foreground: 224 71.4% 4.1%;
-    --primary: 120 61% 34%; /* #38761D - A nice, earthy green */
-    --primary-foreground: 210 40% 98%;
+    --primary: 45 100% 50%; /* #FFD700 - Sunflower Yellow */
+    --primary-foreground: 224 71.4% 4.1%;
     --secondary: 220 14.3% 95.9%;
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 220 14.3% 95.9%;
     --muted-foreground: 220 8.9% 46.1%;
-    --accent: 120 73% 75%; /* #90EE90 - A lighter green accent */
+    --accent: 96 73% 75%; /* #90EE90 - Soft Green */
     --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 120 61% 34%;
+    --ring: 45 100% 50%;
     --radius: 0.5rem;
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -44,7 +44,7 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
   .dark {
-    --background-start-rgb: 22, 28, 41; /* Darker version of 222.2 47.4% 11.2% */
+    --background-start-rgb: 22, 28, 41;
     --background-end-rgb: 32, 40, 56;
     --background: 222.2 47.4% 11.2%;
     --foreground: 210 40% 96%;
@@ -52,19 +52,19 @@
     --card-foreground: 210 40% 96%;
     --popover: 222.2 47.4% 11.2%;
     --popover-foreground: 210 40% 96%;
-    --primary: 120 61% 40%; /* A slightly lighter green for dark mode */
-    --primary-foreground: 210 40% 98%;
+    --primary: 45 100% 50%; /* #FFD700 - Sunflower Yellow */
+    --primary-foreground: 224 71.4% 4.1%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-    --accent: 120 73% 75%;
+    --accent: 96 73% 75%; /* #90EE90 - Soft Green */
     --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 120 61% 40%;
+    --ring: 45 100% 50%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;

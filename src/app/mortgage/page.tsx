@@ -33,17 +33,19 @@ export default function MortgagePage() {
           </p>
         </div>
         
+        <div className="flex justify-center">
         <Image 
-          src="https://placehold.co/800x300.png"
+          src="https://picsum.photos/800/300"
           alt="Expansive farm property at sunset"
           width={800}
           height={300}
           className="rounded-lg object-cover w-full"
           data-ai-hint="farm property"
         />
+        </div>
 
         <div>
-          <h2 className="text-2xl font-headline font-bold text-primary mb-4">Our Mortgage Products</h2>
+          <h2 className="text-2xl font-headline font-bold text-primary mb-4 text-center md:text-left">Our Mortgage Products</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {loanTypes.map((loan) => (
               <div key={loan.name} className="bg-background/50 p-4 rounded-lg border">
@@ -54,8 +56,8 @@ export default function MortgagePage() {
           </div>
         </div>
 
-        <div>
-          <h2 className="text-2xl font-headline font-bold text-primary mb-4">Why Choose FarmNest Financing?</h2>
+        <div className="text-center md:text-left">
+          <h2 className="text-2xl font-headline font-bold text-primary mb-4">Why Choose AgriMenu Financing?</h2>
           <ul className="space-y-3">
             <li className="flex items-start">
               <CheckCircle className="h-6 w-6 text-accent mr-3 mt-1 flex-shrink-0" />
@@ -77,7 +79,7 @@ export default function MortgagePage() {
           <p className="mb-4">
             Our specialists understand the agricultural market and can guide you through the process, ensuring you get a financial package that supports your long-term vision.
           </p>
-          <Link href="/contact" passHref>
+          <Link href="/contact?subject=Mortgage+Inquiry" passHref>
              <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
               Contact a Loan Specialist
             </Button>
