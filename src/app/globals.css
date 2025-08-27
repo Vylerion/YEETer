@@ -3,6 +3,14 @@
 @tailwind utilities;
 
 @layer base {
+  @font-face {
+    font-family: 'Glitten';
+    src: url('/fonts/Glitten.woff2') format('woff2'),
+         url('/fonts/Glitten.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
   :root {
     --background-start-rgb: 245, 245, 220; /* F5F5DC */
     --background-end-rgb: 230, 230, 210;

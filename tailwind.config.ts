@@ -45,7 +45,7 @@ export default {
           '"Noto Color Emoji"',
         ],
         headline: [
-          'Inter',
+          'Glitten',
           'ui-sans-serif',
           'system-ui',
           '-apple-system',
