@@ -1,4 +1,17 @@
-import ThreeCanvas from '@/components/three-canvas';
+"use client";
+
+import dynamic from 'next/dynamic';
+import { Skeleton } from '@/components/ui/skeleton';
+
+const ThreeCanvas = dynamic(() => import('@/components/three-canvas'), {
+  ssr: false,
+  loading: () => (
+    <div className="flex h-screen w-screen items-center justify-center">
+      <Skeleton className="h-full w-full" />
+      <p className="absolute text-lg text-foreground">Loading 3D Scene...</p>
+    </div>
+  ),
+});
 
 export default function HomePage() {
   return (
