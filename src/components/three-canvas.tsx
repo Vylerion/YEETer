@@ -302,9 +302,14 @@ const ThreeCanvas: React.FC = () => {
 
         interactiveObjects.forEach(obj => {
             const baseY = objectBaseY.get(obj.uuid) || 0;
-            const targetY = (intersected === obj) ? baseY + 0.5 : baseY;
+            const targetY = (intersected === obj) ? baseY + 0.5 + Math.sin(elapsedTime * 2) * 0.25 : baseY;
             obj.position.y += (targetY - obj.position.y) * 0.1;
-            obj.rotation.y = Math.sin(elapsedTime * 0.5 + obj.position.x) * 0.2;
+
+            if (intersected === obj) {
+                obj.rotation.y += 0.01;
+            } else {
+                obj.rotation.y += (Math.sin(elapsedTime * 0.5 + obj.position.x) * 0.2 - obj.rotation.y) * 0.05;
+            }
         });
 
         composer.render();
