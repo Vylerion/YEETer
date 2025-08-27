@@ -232,7 +232,7 @@ const ThreeCanvas: React.FC = () => {
 
     const clock = new THREE.Clock();
     let animationProgress = 0;
-    const animationDuration = 2; // in seconds
+    const animationDuration = 4; // in seconds
 
     const animate = () => {
         requestAnimationFrame(animate);
@@ -343,3 +343,5 @@ const ThreeCanvas: React.FC = () => {
 };
 
 export default ThreeCanvas;
+
+    
