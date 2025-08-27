@@ -16,7 +16,7 @@ const products = [
 
 export default function MarketPage() {
   return (
-    <PageLayout title="AgriMenu Marketplace">
+    <PageLayout title="FarmNest Marketplace">
       <div className="space-y-12">
         <div className="text-center md:text-left">
           <h2 className="text-3xl font-bold font-headline text-primary mb-2">Buy Goods</h2>
@@ -54,7 +54,7 @@ export default function MarketPage() {
         <div className="bg-background/50 p-8 rounded-lg border-2 border-dashed text-center md:text-left">
             <h2 className="text-3xl font-bold font-headline text-primary mb-4 flex items-center justify-center md:justify-start"><Store className="mr-3"/> Sell Your Products</h2>
             <p className="mb-4">
-              Have products to sell? Join the AgriMenu Marketplace to reach a community of passionate farmers and consumers. We provide the platform, you provide the quality goods.
+              Have products to sell? Join the FarmNest Marketplace to reach a community of passionate farmers and consumers. We provide the platform, you provide the quality goods.
             </p>
             <div className="flex items-start p-4 rounded-md bg-accent/10">
                 <ShieldCheck className="h-8 w-8 text-accent mr-4 mt-1 flex-shrink-0" />

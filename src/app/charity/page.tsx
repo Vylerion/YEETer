@@ -29,7 +29,7 @@ export default function CharityPage() {
       <div className="space-y-8">
         <div className="text-center">
             <p className="text-xl">
-              At AgriMenu, we believe in cultivating more than just crops; we believe in cultivating community. A portion of every transaction made through our platform is dedicated to supporting the very heart of agriculture—the people and communities who sustain it.
+              At FarmNest, we believe in cultivating more than just crops; we believe in cultivating community. A portion of every transaction made through our platform is dedicated to supporting the very heart of agriculture—the people and communities who sustain it.
             </p>
         </div>
         
@@ -59,7 +59,7 @@ export default function CharityPage() {
         <div className="text-center md:text-left">
           <h2 className="text-2xl font-headline font-bold text-primary mb-4">How It Works</h2>
           <p>
-            When you use AgriMenu for your mortgage, insurance, or marketplace needs, you're automatically contributing to our community fund. We're transparent about our contributions and partner with established non-profit organizations to ensure that every dollar makes a real impact where it's needed most.
+            When you use FarmNest for your mortgage, insurance, or marketplace needs, you're automatically contributing to our community fund. We're transparent about our contributions and partner with established non-profit organizations to ensure that every dollar makes a real impact where it's needed most.
           </p>
         </div>
         

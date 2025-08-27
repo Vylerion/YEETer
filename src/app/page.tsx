@@ -14,7 +14,7 @@ export default function LoginPage() {
           <CardHeader className="text-center space-y-2 pt-12">
             <div className="inline-flex items-center justify-center gap-2">
               <Leaf className="h-10 w-10 text-primary" />
-              <CardTitle className="text-4xl font-headline text-primary">AgriMenu</CardTitle>
+              <CardTitle className="text-4xl font-headline text-primary">FarmNest</CardTitle>
             </div>
             <CardDescription>Enter the digital farmstead</CardDescription>
           </CardHeader>

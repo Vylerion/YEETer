@@ -20,8 +20,8 @@
     --card-foreground: 224 71.4% 4.1%;
     --popover: 60 56% 94%;
     --popover-foreground: 224 71.4% 4.1%;
-    --primary: 45 100% 50%; /* #FFD700 - Sunflower Yellow */
-    --primary-foreground: 224 71.4% 4.1%;
+    --primary: 88 43% 35%; /* #3A6627 - A deep, earthy green */
+    --primary-foreground: 210 40% 98%;
     --secondary: 220 14.3% 95.9%;
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 220 14.3% 95.9%;
@@ -32,7 +32,7 @@
     --destructive-foreground: 210 40% 98%;
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 45 100% 50%;
+    --ring: 88 43% 35%;
     --radius: 0.5rem;
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -52,7 +52,7 @@
     --card-foreground: 210 40% 96%;
     --popover: 222.2 47.4% 11.2%;
     --popover-foreground: 210 40% 96%;
-    --primary: 45 100% 50%; /* #FFD700 - Sunflower Yellow */
+    --primary: 90 70% 55%; /* A brighter green for dark mode */
     --primary-foreground: 224 71.4% 4.1%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -64,7 +64,7 @@
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 45 100% 50%;
+    --ring: 90 70% 55%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;

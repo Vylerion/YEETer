@@ -57,7 +57,7 @@ export default function InsurancePage() {
         </div>
 
         <div className="text-center md:text-left">
-          <h2 className="text-2xl font-headline font-bold text-primary mb-4">Why Insure with AgriMenu?</h2>
+          <h2 className="text-2xl font-headline font-bold text-primary mb-4">Why Insure with FarmNest?</h2>
           <ul className="space-y-3">
             <li className="flex items-start">
               <CheckCircle className="h-6 w-6 text-accent mr-3 mt-1 flex-shrink-0" />

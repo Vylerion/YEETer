@@ -4,7 +4,7 @@ import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
-  title: 'AgriMenu',
+  title: 'FarmNest',
   description: 'An interactive 3D menu for farm services.',
 };
 
