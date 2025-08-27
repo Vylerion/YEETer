@@ -6,8 +6,6 @@ import { useRouter } from 'next/navigation';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 
@@ -79,13 +77,13 @@ const ThreeCanvas: React.FC = () => {
         if(!context) return;
         
         const fontSize = 48;
-        context.font = `bold ${fontSize}px "PT Sans"`;
+        context.font = `bold ${fontSize}px sans-serif`;
         const textWidth = context.measureText(text).width;
         
         canvas.width = textWidth + 20;
         canvas.height = fontSize + 20;
         
-        context.font = `bold ${fontSize}px "PT Sans"`;
+        context.font = `bold ${fontSize}px sans-serif`;
         context.fillStyle = 'rgba(0, 0, 0, 0.7)';
         context.fillRect(0, 0, canvas.width, canvas.height);
         
