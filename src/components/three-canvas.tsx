@@ -23,7 +23,7 @@ const ThreeCanvas: React.FC = () => {
     
     // Camera
     const camera = new THREE.PerspectiveCamera(75, currentMount.clientWidth / currentMount.clientHeight, 0.1, 1000);
-    const startPosition = new THREE.Vector3(0, 25, 25);
+    const startPosition = new THREE.Vector3(0, 35, 35);
     const endPosition = new THREE.Vector3(0, 8, 18);
     camera.position.copy(startPosition);
 
@@ -232,7 +232,7 @@ const ThreeCanvas: React.FC = () => {
 
     const clock = new THREE.Clock();
     let animationProgress = 0;
-    const animationDuration = 4; // in seconds
+    const animationDuration = 2; // in seconds
 
     const animate = () => {
         requestAnimationFrame(animate);
