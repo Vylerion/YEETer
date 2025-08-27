@@ -24,7 +24,7 @@ const ThreeCanvas: React.FC = () => {
     // Camera
     const camera = new THREE.PerspectiveCamera(75, currentMount.clientWidth / currentMount.clientHeight, 0.1, 1000);
     const startPosition = new THREE.Vector3(0, 35, 35);
-    const endPosition = new THREE.Vector3(0, 8, 18);
+    const endPosition = new THREE.Vector3(0, 4, 8);
     camera.position.copy(startPosition);
 
     // Renderer
@@ -344,4 +344,5 @@ const ThreeCanvas: React.FC = () => {
 
 export default ThreeCanvas;
 
+    
     
