@@ -46,20 +46,9 @@ const ThreeCanvas: React.FC = () => {
     controls.maxDistance = 30;
     controls.maxPolarAngle = Math.PI / 2 - 0.05; // Prevents camera from going below the ground
     
-    // HDRI Loader
-    const rgbeLoader = new RGBELoader();
-    // To use your own HDRI, add it to the /public/hdri/ folder and update the path below.
-    // You can find free HDRIs on sites like Poly Haven.
-    rgbeLoader.load('/hdri/sky.hdr', (texture) => {
-        texture.mapping = THREE.EquirectangularReflectionMapping;
-        scene.background = texture;
-        scene.environment = texture;
-    }, undefined, () => {
-        // Fallback if HDRI fails to load
-        console.warn("Could not load HDRI, falling back to a solid color.");
-        scene.background = new THREE.Color(0x87CEEB);
-    });
-
+    // Fallback if HDRI fails to load
+    scene.background = new THREE.Color(0x87CEEB);
+    
     // Post-processing for a subtle glow effect
     const renderScene = new RenderPass( scene, camera );
     const bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );
@@ -73,9 +62,9 @@ const ThreeCanvas: React.FC = () => {
 
 
     // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // Reduced intensity as HDRI provides light
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
     scene.add(ambientLight);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0); // Kept for shadows
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 2.0);
     directionalLight.position.set(5, 10, 7.5);
     directionalLight.castShadow = true;
     scene.add(directionalLight);
@@ -113,56 +102,91 @@ const ThreeCanvas: React.FC = () => {
         scene.add(sprite);
     }
     
-    // To use GLB/GLTF files, update the 'model' property with the path to your file in the /public folder.
-    // Example: model: '/models/my-cool-model.glb'
-    // If 'model' is null, it will fall back to using the 'geometry' and 'color'.
+    // Barn (Insurance)
+    const barn = new THREE.Group();
+    const barnBase = new THREE.Mesh(
+      new THREE.BoxGeometry(3, 2.5, 3.5),
+      new THREE.MeshStandardMaterial({ color: 0xc62828 })
+    );
+    const barnRoof = new THREE.Mesh(
+      new THREE.CylinderGeometry(0, 2.5, 2, 4, 1),
+      new THREE.MeshStandardMaterial({ color: 0x8d6e63 })
+    );
+    barnRoof.position.y = 2.25;
+    barnRoof.rotation.y = Math.PI / 4;
+    barn.add(barnBase);
+    barn.add(barnRoof);
+    
+    // Seedling (Market)
+    const seedling = new THREE.Group();
+    const stem = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.1, 0.1, 1.5, 8),
+        new THREE.MeshStandardMaterial({ color: 0x66bb6a })
+    );
+    const leaf1 = new THREE.Mesh(
+        new THREE.SphereGeometry(0.5, 8, 8),
+        new THREE.MeshStandardMaterial({ color: 0x66bb6a })
+    );
+    leaf1.position.y = 0.75;
+    leaf1.position.x = 0.4;
+    leaf1.scale.y = 0.3;
+    const leaf2 = leaf1.clone();
+    leaf2.position.x = -0.4;
+    seedling.add(stem);
+    seedling.add(leaf1);
+    seedling.add(leaf2);
+
+    // Building (Mortgage)
+    const building = new THREE.Mesh(new THREE.BoxGeometry(2, 4, 2), new THREE.MeshStandardMaterial({ color: 0x78909c }));
+    
+    // Tractor (Charity)
+    const tractor = new THREE.Group();
+    const body = new THREE.Mesh(new THREE.BoxGeometry(2.5, 1.5, 1.8), new THREE.MeshStandardMaterial({ color: 0xFFD700 }));
+    const wheel1 = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 0.2, 16), new THREE.MeshStandardMaterial({ color: 0x333333 }));
+    wheel1.position.set(-1, -0.5, 1);
+    wheel1.rotation.x = Math.PI / 2;
+    const wheel2 = wheel1.clone();
+    wheel2.position.set(1, -0.5, 1);
+    const wheel3 = wheel1.clone();
+    wheel3.scale.set(0.6, 0.6, 0.6);
+    wheel3.position.set(-1, -0.5, -1);
+    const wheel4 = wheel3.clone();
+    wheel4.position.set(1, -0.5, -1);
+    tractor.add(body, wheel1, wheel2, wheel3, wheel4);
+
+
+    // Envelope (Contact)
+    const envelope = new THREE.Mesh(new THREE.PlaneGeometry(2.5, 1.5), new THREE.MeshStandardMaterial({ color: 0xffffff, side: THREE.DoubleSide }));
+
     const items = [
-        { url: '/insurance', label: 'Insurance', color: 0xc62828, geometry: new THREE.BoxGeometry(3, 2.5, 3.5), y: 1.25, labelY: 3.5, model: null },
-        { url: '/market', label: 'Market', color: 0x66bb6a, geometry: new THREE.ConeGeometry(0.7, 1.5, 8), y: 0.75, labelY: 2.5, model: null },
-        { url: '/mortgage', label: 'Mortgage', color: 0x78909c, geometry: new THREE.BoxGeometry(2, 4, 2), y: 2, labelY: 5, model: null },
-        { url: '/charity', label: 'Charity', color: 0xFFD700, geometry: new THREE.BoxGeometry(2.5, 1.5, 1.8), y: 0.75, labelY: 2.5, model: null },
-        { url: '/contact', label: 'Contact', color: 0xffffff, geometry: new THREE.PlaneGeometry(2.5, 1.5), y: 0.75, labelY: 2.5, model: null },
-        { url: '/about', label: 'About', color: 0x42a5f5, geometry: new THREE.TorusGeometry(1, 0.2, 16, 100), y: 1.2, labelY: 3.2, model: null },
-        { url: '/', label: 'Logout', color: 0xef5350, geometry: new THREE.CylinderGeometry(1, 1, 0.5, 32), y: 0.25, labelY: 2, model: null }
+        { url: '/insurance', label: 'Insurance', object: barn, y: 1.25, labelY: 4 },
+        { url: '/market', label: 'Market', object: seedling, y: 0.75, labelY: 2.5 },
+        { url: '/mortgage', label: 'Mortgage', object: building, y: 2, labelY: 5 },
+        { url: '/charity', label: 'Charity', object: tractor, y: 1.0, labelY: 2.5 },
+        { url: '/contact', label: 'Contact', object: envelope, y: 0.75, labelY: 2.5 },
+        { url: '/about', label: 'About', object: new THREE.Mesh(new THREE.TorusGeometry(1, 0.2, 16, 100), new THREE.MeshStandardMaterial({color: 0x42a5f5})), y: 1.2, labelY: 3.2 },
+        { url: '/', label: 'Logout', object: new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 0.5, 32), new THREE.MeshStandardMaterial({color: 0xef5350})), y: 0.25, labelY: 2 }
     ];
 
     const radius = 10;
     const angleStep = (Math.PI * 2) / items.length;
-    const gltfLoader = new GLTFLoader();
 
     items.forEach((itemData, index) => {
         const angle = index * angleStep;
         const x = radius * Math.cos(angle);
         const z = radius * Math.sin(angle);
 
-        const processObject = (object: THREE.Object3D) => {
-            object.position.set(x, itemData.y, z);
-            object.userData = { url: itemData.url, label: itemData.label };
-            if (object instanceof THREE.Mesh) {
-                object.userData.originalColor = (object.material as THREE.MeshStandardMaterial).color.clone();
-            }
-            scene.add(object);
-            interactiveObjects.push(object);
-            const labelPosition = new THREE.Vector3(x, itemData.labelY, z);
-            addLabel(itemData.label, labelPosition);
-            objectBaseY.set(object.uuid, object.position.y);
+        const object = itemData.object;
+        object.position.set(x, itemData.y, z);
+        object.userData = { url: itemData.url, label: itemData.label };
+        if (object instanceof THREE.Mesh) {
+            object.userData.originalColor = (object.material as THREE.MeshStandardMaterial).color.clone();
         }
-
-        if (itemData.model) {
-            gltfLoader.load(itemData.model, (gltf) => {
-                const model = gltf.scene;
-                // You may need to scale or adjust your model here
-                // model.scale.set(0.5, 0.5, 0.5); 
-                processObject(model);
-            });
-        } else {
-            const material = new THREE.MeshStandardMaterial({ 
-                color: itemData.color,
-                side: itemData.label === 'Contact' ? THREE.DoubleSide : THREE.FrontSide
-            });
-            const mesh = new THREE.Mesh(itemData.geometry, material);
-            processObject(mesh);
-        }
+        scene.add(object);
+        interactiveObjects.push(object);
+        const labelPosition = new THREE.Vector3(x, itemData.labelY, z);
+        addLabel(itemData.label, labelPosition);
+        objectBaseY.set(object.uuid, object.position.y);
     });
 
     const floor = new THREE.Mesh(
@@ -235,7 +259,7 @@ const ThreeCanvas: React.FC = () => {
         // Reset previous intersected object
         if (intersected && (intersects.length === 0 || intersects[0].object.parent?.userData?.url !== intersected.userData.url)) {
             (intersected as THREE.Mesh).traverse((child) => {
-                if (child instanceof THREE.Mesh) {
+                if (child instanceof THREE.Mesh && child.material instanceof THREE.MeshStandardMaterial) {
                      child.material.emissive.setHex(0x000000);
                 }
             });
@@ -253,7 +277,7 @@ const ThreeCanvas: React.FC = () => {
                 // Clear previous intersection
                 if (intersected) {
                      (intersected as THREE.Mesh).traverse((child) => {
-                        if (child instanceof THREE.Mesh) {
+                        if (child instanceof THREE.Mesh && child.material instanceof THREE.MeshStandardMaterial) {
                              child.material.emissive.setHex(0x000000);
                         }
                     });
@@ -261,7 +285,7 @@ const ThreeCanvas: React.FC = () => {
                 intersected = topLevelObject;
                 document.body.style.cursor = 'pointer';
                  (intersected as THREE.Mesh).traverse((child) => {
-                    if (child instanceof THREE.Mesh) {
+                    if (child instanceof THREE.Mesh && child.material instanceof THREE.MeshStandardMaterial) {
                         child.material.emissive.setHex(0xaaaaaa);
                     }
                 });
@@ -269,7 +293,7 @@ const ThreeCanvas: React.FC = () => {
         } else if (isDragging) {
              if (intersected) {
                 (intersected as THREE.Mesh).traverse((child) => {
-                    if (child instanceof THREE.Mesh) {
+                    if (child instanceof THREE.Mesh && child.material instanceof THREE.MeshStandardMaterial) {
                          child.material.emissive.setHex(0x000000);
                     }
                 });
