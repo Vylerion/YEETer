@@ -7,6 +7,8 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 
 
 const ThreeCanvas: React.FC = () => {
@@ -100,70 +102,19 @@ const ThreeCanvas: React.FC = () => {
         scene.add(sprite);
     }
     
-    // Barn (Insurance)
-    const barn = new THREE.Group();
-    const barnBase = new THREE.Mesh(
-      new THREE.BoxGeometry(3, 2.5, 3.5),
-      new THREE.MeshStandardMaterial({ color: 0xc62828 })
-    );
-    const barnRoof = new THREE.Mesh(
-      new THREE.CylinderGeometry(0, 2.5, 2, 4, 1),
-      new THREE.MeshStandardMaterial({ color: 0x8d6e63 })
-    );
-    barnRoof.position.y = 2.25;
-    barnRoof.rotation.y = Math.PI / 4;
-    barn.add(barnBase);
-    barn.add(barnRoof);
-    
-    // Seedling (Market)
-    const seedling = new THREE.Group();
-    const stem = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.1, 0.1, 1.5, 8),
-        new THREE.MeshStandardMaterial({ color: 0x66bb6a })
-    );
-    const leaf1 = new THREE.Mesh(
-        new THREE.SphereGeometry(0.5, 8, 8),
-        new THREE.MeshStandardMaterial({ color: 0x66bb6a })
-    );
-    leaf1.position.y = 0.75;
-    leaf1.position.x = 0.4;
-    leaf1.scale.y = 0.3;
-    const leaf2 = leaf1.clone();
-    leaf2.position.x = -0.4;
-    seedling.add(stem);
-    seedling.add(leaf1);
-    seedling.add(leaf2);
-
-    // Building (Mortgage)
-    const building = new THREE.Mesh(new THREE.BoxGeometry(2, 4, 2), new THREE.MeshStandardMaterial({ color: 0x78909c }));
-    
-    // Tractor (Charity)
-    const tractor = new THREE.Group();
-    const body = new THREE.Mesh(new THREE.BoxGeometry(2.5, 1.5, 1.8), new THREE.MeshStandardMaterial({ color: 0xFFD700 }));
-    const wheel1 = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 0.2, 16), new THREE.MeshStandardMaterial({ color: 0x333333 }));
-    wheel1.position.set(-1, -0.5, 1);
-    wheel1.rotation.x = Math.PI / 2;
-    const wheel2 = wheel1.clone();
-    wheel2.position.set(1, -0.5, 1);
-    const wheel3 = wheel1.clone();
-    wheel3.scale.set(0.6, 0.6, 0.6);
-    wheel3.position.set(-1, -0.5, -1);
-    const wheel4 = wheel3.clone();
-    wheel4.position.set(1, -0.5, -1);
-    tractor.add(body, wheel1, wheel2, wheel3, wheel4);
-
-
-    // Envelope (Contact)
-    const envelope = new THREE.Mesh(new THREE.PlaneGeometry(2.5, 1.5), new THREE.MeshStandardMaterial({ color: 0xffffff, side: THREE.DoubleSide }));
+    const loader = new GLTFLoader();
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath('/draco/');
+    loader.setDRACOLoader(dracoLoader);
 
     const items = [
-        { url: '/insurance', label: 'Insurance', object: barn, y: 1.25, labelY: 4 },
-        { url: '/market', label: 'Market', object: seedling, y: 0.75, labelY: 2.5 },
-        { url: '/mortgage', label: 'Mortgage', object: building, y: 2, labelY: 5 },
-        { url: '/charity', label: 'Charity', object: tractor, y: 1.0, labelY: 2.5 },
-        { url: '/contact', label: 'Contact', object: envelope, y: 0.75, labelY: 2.5 },
-        { url: '/about', label: 'About', object: new THREE.Mesh(new THREE.TorusGeometry(1, 0.2, 16, 100), new THREE.MeshStandardMaterial({color: 0x42a5f5})), y: 1.2, labelY: 3.2 },
-        { url: '/', label: 'Logout', object: new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 0.5, 32), new THREE.MeshStandardMaterial({color: 0xef5350})), y: 0.25, labelY: 2 }
+        { url: '/insurance', label: 'Insurance', modelUrl: '/models/barn.glb', scale: 0.8, y: 0, labelY: 4 },
+        { url: '/market', label: 'Market', modelUrl: '/models/seedling.glb', scale: 2, y: 0, labelY: 2.5 },
+        { url: '/mortgage', label: 'Mortgage', modelUrl: '/models/building.glb', scale: 0.6, y: 0, labelY: 5 },
+        { url: '/charity', label: 'Charity', modelUrl: '/models/tractor.glb', scale: 1.2, y: 0, labelY: 2.5 },
+        { url: '/contact', label: 'Contact', modelUrl: '/models/envelope.glb', scale: 0.5, y: 0.75, labelY: 2.5 },
+        { url: '/about', label: 'About', modelUrl: '/models/info.glb', scale: 0.5, y: 1.2, labelY: 3.2 },
+        { url: '/', label: 'Logout', modelUrl: '/models/logout.glb', scale: 0.5, y: 0.25, labelY: 2 }
     ];
 
     const radius = 10;
@@ -174,17 +125,30 @@ const ThreeCanvas: React.FC = () => {
         const x = radius * Math.cos(angle);
         const z = radius * Math.sin(angle);
 
-        const object = itemData.object;
-        object.position.set(x, itemData.y, z);
-        object.userData = { url: itemData.url, label: itemData.label };
-        if (object instanceof THREE.Mesh) {
-            object.userData.originalColor = (object.material as THREE.MeshStandardMaterial).color.clone();
-        }
-        scene.add(object);
-        interactiveObjects.push(object);
-        const labelPosition = new THREE.Vector3(x, itemData.labelY, z);
-        addLabel(itemData.label, labelPosition);
-        objectBaseY.set(object.uuid, object.position.y);
+        loader.load(itemData.modelUrl, (gltf) => {
+            const object = gltf.scene;
+            object.scale.set(itemData.scale, itemData.scale, itemData.scale);
+            object.position.set(x, itemData.y, z);
+            object.userData = { url: itemData.url, label: itemData.label };
+
+            scene.add(object);
+            interactiveObjects.push(object);
+            
+            const labelPosition = new THREE.Vector3(x, itemData.labelY, z);
+            addLabel(itemData.label, labelPosition);
+            objectBaseY.set(object.uuid, object.position.y);
+        }, undefined, (error) => {
+            console.error(`An error happened loading ${itemData.modelUrl}`, error);
+            // Optional: Add a placeholder mesh on error
+            const placeholder = new THREE.Mesh(new THREE.BoxGeometry(2, 2, 2), new THREE.MeshStandardMaterial({ color: 0xff0000 }));
+            placeholder.position.set(x, itemData.y, z);
+            placeholder.userData = { url: itemData.url, label: itemData.label };
+            scene.add(placeholder);
+            interactiveObjects.push(placeholder);
+            const labelPosition = new THREE.Vector3(x, itemData.labelY, z);
+            addLabel(itemData.label, labelPosition);
+            objectBaseY.set(placeholder.uuid, placeholder.position.y);
+        });
     });
 
     const floor = new THREE.Mesh(
@@ -343,3 +307,5 @@ const ThreeCanvas: React.FC = () => {
 };
 
 export default ThreeCanvas;
+
+    
